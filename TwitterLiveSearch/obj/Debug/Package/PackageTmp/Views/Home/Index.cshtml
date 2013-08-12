@@ -1,0 +1,41 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Index</title>
+    <script type="text/javascript" src="../../Scripts/jquery-1.7.1.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
+    <script type="text/javascript" src="../../Scripts/MicrosoftMvcAjax.js"></script>
+    <script type="text/javascript" src="../../Scripts/pusherscript.js"></script>
+    <script src="http://js.pusher.com/2.1/pusher.min.js" type="text/javascript"></script>
+    
+    @if(ViewBag.Id != null)
+    {
+        <script type="text/javascript">
+            StartPusher("@System.Configuration.ConfigurationManager.AppSettings["APP_KEY"]", "@ViewBag.Id");
+        </script>
+    }
+    
+    
+</head>
+    <body>
+        @if(ViewBag.Id == null)
+        {
+            <text>Please include a search string in the Address Bar</text>
+        }
+        else
+        {
+            @Ajax.ActionLink("Pause Feed", "ControlSearch",new {id = ViewBag.Id, pause = true} ,new AjaxOptions() {HttpMethod = "POST", OnSuccess = "FeedPaused"}, new {id = "pausecontrol", style="display:none"});
+            @Ajax.ActionLink("Resume Feed", "ControlSearch", new { id = ViewBag.Id, pause = false }, new AjaxOptions() { HttpMethod = "POST", OnSuccess = "FeedResumed" }, new { id = "resumecontrol", style="display:none"});
+        }
+        <br/>
+        <div id="twitter" class="tweet_column">
+            
+        </div>
+    </body>
+</html>

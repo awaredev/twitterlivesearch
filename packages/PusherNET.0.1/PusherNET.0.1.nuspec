@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>PusherNET</id>
+    <version>0.1</version>
+    <title>Pusher.NET</title>
+    <authors>vegardlarsen</authors>
+    <owners>vegardlarsen</owners>
+    <projectUrl>https://github.com/digitalcreations/Pusher.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>.NET implementation of Pusher.
+
+When installing this package, you will have to provide a connection method. For now we only provide a built-in connection method for Windows Store apps, new up a Pusher.Connections.WindowsStore.WebsocketConnectionFactory for those.</description>
+    <releaseNotes>Initial release.</releaseNotes>
+    <copyright>Copyright 2013 Digital Creations AS.</copyright>
+    <language />
+    <tags>pusher</tags>
+    <dependencies>
+      <dependency id="Microsoft.Bcl.Async" version="1.0.16" />
+      <dependency id="Newtonsoft.Json" version="5.0.5" />
+    </dependencies>
+    <references>
+      <reference file="Pusher.Connections.WindowsStore.dll" />
+      <reference file="Pusher.dll" />
+    </references>
+  </metadata>
+</package>

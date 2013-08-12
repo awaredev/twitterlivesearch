@@ -1,0 +1,14 @@
+﻿@* Generator : Template TypeVisibility : Public *@
+@* DisableLinePragmas: true *@ 
+@functions
+{
+     new public dynamic Model { get; set; }}
+
+
+    <div class="tweet">
+        <img class="tweet_image" src="@Model.user.profile_image_url" />
+        <span class="tweet_name">@Model.user.name</span><span class="tweet_screen_name">&#64;@Model.user.screen_name</span>
+        <br /><span class="tweet_text">@Model.text</span>
+        <br /><span class="tweet_date">@Model.created_at</span>   
+    </div>
+    

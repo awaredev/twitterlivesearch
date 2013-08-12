@@ -1,0 +1,16 @@
+﻿@* Generator : Template TypeVisibility : Public *@
+@* DisableLinePragmas: true *@ 
+@functions
+{
+     new public dynamic Model { get; set; }}
+
+@foreach(var tweet in Model.statuses)
+{
+    <div class="tweet">
+        <img class="tweet_image" src="@tweet.user.profile_image_url" />
+        <span class="tweet_name">@tweet.user.name</span><span class="tweet_screen_name">&#64;@tweet.user.screen_name</span>
+        <br /><span class="tweet_text">@tweet.text</span>
+        <br /><span class="tweet_date">@tweet.created_at</span>   
+    </div>
+    
+}
