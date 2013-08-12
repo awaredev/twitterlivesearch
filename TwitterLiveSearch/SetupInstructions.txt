@@ -1,0 +1,36 @@
+﻿SETUP INSTRUCTIONS
+
+1. Create a Twitter Application by signing into https://dev.twitter.com/apps
+
+2. Put your Twitter Application Key and Secret into WebConfig TWITTER_KEY and TWITTER_SECRET settings
+
+3. Create a Pusher Application at https://app.pusher.com/ 
+
+4. Put your Pusher Application ID, Key and Secret into WebConfig API_ID, API_KEY and API_SECRET settings
+
+5. At https://app.pusher.com/ , create a 'Channel existence' webhook with a URL of 'mydomain.com/webhook/subscribe'. 
+	(These will only work when the web application is hosted on a web-server)
+
+	When testing locally, you will need to 'Pause' and 'Resume' the feed to get it started, as Pusher WebHooks cannot
+	be sent to local machines without public URL's. Be sure to stop the application manually in IIS or it will 
+	continue to search Twitter.
+
+	You can adjust the type of Twitter search results in WebConfig, as well as how often the application checks
+	for new tweets in WebConfig settings for SEARCH_TYPE and SEARCH_INTERVAL
+
+HOW IT WORKS
+
+1. When a user connects using a URL containing a search string, the server generates an instance of TwitterSeeker 
+	and adds it to a Static ConcurrentDictionary tracking it with a GUID and storing the search string. This GUID
+	is passed to the MVC View and used as a channel name to subscribe to in the Pusher application.
+	
+2. When the channel is subscribed to successfully, Pusher sends a Webhook to the web server which identifies the
+	channel GUID (which is also the TwitterSeeker GUID). The web application gets the TwitterSeeker from the dictionary,
+	and has it start searching, sending results to Pusher.
+
+3. Pusher publishes the results on the channel, which then are sent to the user's browser and displayed in page.
+
+4. If the user clicks 'Pause Feed', the TwitterSeeker stops searching once the current search is done and will
+	restart when the user Resumes the search. When the user closes the page and breaks the websocket connection,
+	a Webhook from Pusher notifies the web application to stop the TwitterSeeker associated to the channel and
+	Dispose of it.

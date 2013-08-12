@@ -208,6 +208,7 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\modernizr-2.5.3.js" />
     <Content Include="Scripts\pusherscript.js" />
+    <Content Include="SetupInstructions.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
