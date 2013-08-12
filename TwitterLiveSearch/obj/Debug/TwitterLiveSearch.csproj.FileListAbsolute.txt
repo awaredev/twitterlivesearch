@@ -27,7 +27,6 @@ c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\Twitter
 c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\bin\System.Web.WebPages.Deployment.xml
 c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\bin\System.Web.WebPages.Razor.xml
 c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\bin\RestSharp.xml
-c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\obj\Debug\TwitterLiveSearch.csprojResolveAssemblyReference.cache
 c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\obj\Debug\TwitterLiveSearch.dll
 c:\users\brennan\documents\visual studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\obj\Debug\TwitterLiveSearch.pdb
 c:\Users\Brennan\Documents\Visual Studio 2012\Projects\TwitterLiveSearch\TwitterLiveSearch\bin\RazorGenerator.Templating.dll

@@ -27,8 +27,8 @@ namespace TwitterLiveSearch
 
             routes.MapRoute(
                 "Default", // Route name
-                "{id}", // URL with parameters
-                new { controller = "Home", action = "Index", id = UrlParameter.Optional } // Parameter defaults
+                "{detail}", // URL with parameters
+                new { controller = "Home", action = "Index", detail = UrlParameter.Optional } // Parameter defaults
             );
             routes.MapRoute(
                 "Basic", // Route name

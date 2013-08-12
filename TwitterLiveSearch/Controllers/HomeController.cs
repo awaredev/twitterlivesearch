@@ -12,17 +12,19 @@ namespace TwitterLiveSearch.Controllers
         //
         // GET: /Home/
 
-        public ActionResult Index(string id)
+        [AcceptVerbs(HttpVerbs.Get)]
+        public ActionResult Index(string detail)
         {
-            if(!String.IsNullOrWhiteSpace(id))
+            if(!String.IsNullOrWhiteSpace(detail))
             {
                 //Create a GUID to identify this search- it will be used to track the channel.
                 var seeker = Guid.NewGuid();
                 //Create Seeker to search Twitter
-                TwitterSeeker.Seekers.TryAdd(seeker, new TwitterSeeker(seeker, id));
+                TwitterSeeker.Seekers.TryAdd(seeker, new TwitterSeeker(seeker, detail));
                 //TwitterSeeker.Seekers[seeker].StartSearch(); //Local Testing only- online, Webhooks control search
                 //Send GUID to View so Pusher JS can subscribe to channel
                 ViewBag.Id = seeker.ToString();
+                TwitterSeeker.NotifyPusher("New Channel ID " + seeker.ToString() + "Search: " + detail);
             }
             
             return View();
@@ -37,58 +39,12 @@ namespace TwitterLiveSearch.Controllers
             }
             else
             {
-                TwitterSeeker.Seekers[new Guid(id)].StartSearch();
-            }
-            return null;
-        }
-
-        //POST anchor for Pusher Webhook to start and stop search 
-        //when Channel is occupied/vacated
-        [AcceptVerbs(HttpVerbs.Post)]
-        public ActionResult Subscribed()
-        {
-            //Get the WebHook data from
-            var hook = GetWebHook();
-            foreach (var ev in hook.events)
-            {
-                //Empty Seeker for Try methods
-                TwitterSeeker seeker = null;
-                switch (ev.name)
-                {
-                    case "channel_occupied":
-                        //Trigger the Seeker to start searching Twitter
-                        if(TwitterSeeker.Seekers.TryGetValue(new Guid(ev.channel), out seeker))
-                            seeker.StartSearch();
-                        else
-                        {
-                            //Alert Pusher of problem
-                            return new HttpStatusCodeResult(406, "Could not create Seeker");
-                        }
-                        break;
-                    case "channel_vacated" :
-                        //Remove Seeker from collection
-                        if(TwitterSeeker.Seekers.TryRemove(new Guid(ev.channel), out seeker))
-                        {
-                            seeker.Dispose();
-                        }
-                        else
-                        {
-                            //Alert Pusher of problem
-                            return new HttpStatusCodeResult(406, "Could not remove Seeker");
-                        }
-                        break;
-                }
+                TwitterSeeker.Seekers[new Guid(id)].ResumeSearch();
             }
             return new HttpStatusCodeResult(200);
         }
 
-        private WebHook GetWebHook()
-        {
-            Request.InputStream.Seek(0, 0);
-            var reader = new StreamReader(Request.InputStream);
-            var inputString = reader.ReadToEnd();
-            return (WebHook)SimpleJson.SimpleJson.DeserializeObject(inputString, typeof(WebHook)); 
-        }
+        
 
     }
 }

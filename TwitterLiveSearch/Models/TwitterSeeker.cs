@@ -45,11 +45,10 @@ namespace TwitterLiveSearch.Models
         public void StartSearch()
         {
             if(_timer == null)
-                _timer = new Timer(TimerInterval);
+                _timer = new Timer(1000);
             _timer.Elapsed -= TimerOnElapsed;
             _timer.Elapsed += TimerOnElapsed;
             //Do Search, then start timer for next search
-            Search();
             _timer.Start();
         }
 
@@ -75,6 +74,10 @@ namespace TwitterLiveSearch.Models
                     _timer.Start();
                 }
             }
+            else
+            {
+                StartSearch();
+            }
         }
 
         private void TimerOnElapsed(object sender, ElapsedEventArgs elapsedEventArgs)
@@ -87,11 +90,13 @@ namespace TwitterLiveSearch.Models
                 }
                 try
                 {
+                    _timer.Interval = TimerInterval;
                     Search();
                 }
                 catch (Exception e)
                 {
                     //Allows search to continue trying on error after next timer elapse
+                    ResumeSearch();
                 }
             }
         }
@@ -111,6 +116,12 @@ namespace TwitterLiveSearch.Models
             ResumeSearch();
         }
 
+        public static void NotifyPusher(string message)
+        {
+            var pusher = new Pusher(Appid, Appkey, Appsecret);
+            var pushResult = pusher.Trigger("Admin", "message-event", new { message = message });
+        }
+
         private void PushTweets(TwitterObject tweets)
         {
             //String containing data to send to pusher
@@ -120,6 +131,9 @@ namespace TwitterLiveSearch.Models
             //Format found tweets and send when pusher limit reached
             foreach (var tweet in tweets.statuses)
             {
+                //If Twitter forced old results on the search, ignore them
+                if(tweet.id < _lastTweetId)
+                    continue;
                 //Convert tweet to HTML
                 var tweetPartial = new TwitterLiveSearch.Views.Home.Tweet() { Model = tweet };
                 var tweetStr = tweetPartial.TransformText();
@@ -166,8 +180,8 @@ namespace TwitterLiveSearch.Models
        private TwitterObject SearchTweets(AuthToken token)
        {
            WebRequest request = (_lastTweetId > 0)
-                                    ? WebRequest.Create(TwitterSearchUrl + "rpp=100&result_type=" + TwitterResultType +"&q=" + _searchString + "&since_id=" +
-                                    _lastTweetId) : WebRequest.Create(TwitterSearchUrl + "rpp=100&result_type=" + TwitterResultType + "&q=" + _searchString);
+                                    ? WebRequest.Create(TwitterSearchUrl + "count=100&result_type=" + TwitterResultType +"&q=" + _searchString + "&since_id=" +
+                                    _lastTweetId) : WebRequest.Create(TwitterSearchUrl + "count=100&result_type=" + TwitterResultType + "&q=" + _searchString);
           
            request.Method = "GET";
            request.Headers.Add("Authorization", String.Format("Bearer {0}", token.access_token));

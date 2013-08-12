@@ -7,6 +7,9 @@
 <html>
 <head>
     <title>Index</title>
+    
+    <link type="text/css" rel="stylesheet" href="../../Content/Site.css"/>
+
     <script type="text/javascript" src="../../Scripts/jquery-1.7.1.min.js"></script>
     <script type="text/javascript" src="../../Scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script type="text/javascript" src="../../Scripts/MicrosoftAjax.js"></script>
@@ -30,8 +33,9 @@
         }
         else
         {
-            @Ajax.ActionLink("Pause Feed", "ControlSearch",new {id = ViewBag.Id, pause = true} ,new AjaxOptions() {HttpMethod = "POST", OnSuccess = "FeedPaused"}, new {id = "pausecontrol", style="display:none"});
-            @Ajax.ActionLink("Resume Feed", "ControlSearch", new { id = ViewBag.Id, pause = false }, new AjaxOptions() { HttpMethod = "POST", OnSuccess = "FeedResumed" }, new { id = "resumecontrol", style="display:none"});
+            @Ajax.ActionLink("Pause Feed", "ControlSearch",new {id = ViewBag.Id, pause = true} ,new AjaxOptions() {HttpMethod = "POST", OnSuccess = "FeedPaused", OnBegin = "AwaitPause"}, new {id = "pausecontrol", style="display:none"});
+            @Ajax.ActionLink("Resume Feed", "ControlSearch", new { id = ViewBag.Id, pause = false }, new AjaxOptions() { HttpMethod = "POST", OnSuccess = "FeedResumed", OnBegin = "AwaitResume" }, new { id = "resumecontrol", style = "display:none" });
+            <span id="waiting"></span>
         }
         <br/>
         <div id="twitter" class="tweet_column">
